@@ -77,8 +77,8 @@ $searchForm.on("submit", async function (evt) {
 
 
 //display episodes👇🏻
-const episodesArea = ('#episodesArea')
- const episodesList = ('#episodesList')
+const episodesArea = $('#episodesArea')
+ const episodesList = $('#episodesList')
 // get data and return it in a new array containing only data you need  by using a map function and axios
 async function getEpisodes(id) {
   const res = await axios({
@@ -104,9 +104,29 @@ function displayEpisodes(episodes) {
     ,Season${episode.season}
     ,Number${episode.number}
     <li>`)
-    episodesList.append(info)
+    episodesArea.append(info)
   }
+  episodesArea.show();
 }
+
+/** Handle click on episodes button: get episodes for show and display */
+
+async function getAndDisplayEpisodes(evt) {
+  // here's one way to get the ID of the show: search "closest" ancestor
+  // with the class of .Show (which is put onto the enclosing div, which
+  // has the .data-show-id attribute).
+  const showId = $(evt.target).closest(".Show").data("show-id");
+
+  // here's another way to get the ID of the show: search "closest" ancestor
+  // that has an attribute of 'data-show-id'. This is called an "attribute
+  // selector", and it's part of CSS selectors worth learning.
+  // const showId = $(evt.target).closest("[data-show-id]").data("show-id");
+
+  const episodes = await getEpisodes(showId);
+  displayEpisodes(episodes);
+}
+
+showlist.on("click", ".Show-getEpisodes", getAndDisplayEpisodes);
 
 
 
