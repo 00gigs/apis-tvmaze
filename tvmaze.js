@@ -1,9 +1,9 @@
-// return a request via user search 
-"use strict";
 
+"use strict";
+// return a request via user search 👇🏻
 const MISSING_IMAGE_URL = "https://tinyurl.com/missing-tv";
 const TVMAZE_API_URL = "http://api.tvmaze.com/";
-const episodesArea = ('#episodesArea')
+
 
 
 const $searchForm = $("#searchForm");
@@ -36,7 +36,7 @@ async function searchShowsTerm(search){
 
 
 
-// // add show images 
+// // add show content 👇🏻
 const showlist = $('#showsList')
 
 function displayShow(shows) {
@@ -61,7 +61,7 @@ function displayShow(shows) {
 }
 
 
-// passes form submission imput into function searchShowsTerm()
+// passes form submission imput into function searchShowsTerm()👇🏻
 async function searchForShowAndDisplay() {
   const search = $("#searchForm-term").val();
   const shows = await searchShowsTerm(search);
@@ -76,5 +76,38 @@ $searchForm.on("submit", async function (evt) {
 });
 
 
-//display episodes
+//display episodes👇🏻
+const episodesArea = ('#episodesArea')
+ const episodesList = ('#episodesList')
+// get data and return it in a new array containing only data you need  by using a map function and axios
+async function getEpisodes(id) {
+  const res = await axios({
+    baseURL:TVMAZE_API_URL,
+    url:`/shows/${id}/episodes`,
+    method:'GET'
+  })
+
+  return res.data.map(episode =>({
+    id:episode.id,
+    name:episode.name,
+    season:episode.season,
+    number:episode.number
+  }))
+}
+
+
+
+
+function displayEpisodes(episodes) {
+  for (let episode of episodes) {
+    const info = $(`<li>Name${episode.name}
+    ,Season${episode.season}
+    ,Number${episode.number}
+    <li>`)
+    episodesList.append(info)
+  }
+}
+
+
+
 
